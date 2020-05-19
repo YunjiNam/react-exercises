@@ -18,26 +18,42 @@ import "./App.css";
       여기서 비교 대상은 monster 객체의 name 값입니다.
       소문자로 바꾼 monster.name 값과 userInput값을 비교.
       filter 메소드가 반환하는 값을 변수에 저장 후 return 문 안에 CardList에 props로 전달
+
+
 ***********************************************************/
 
 class App extends Component {
+  
   state = {
     monsters: [],
-    userInput: "",
+    userInput: ""
   };
 
   // 데이터 로딩
-
+  componentDidMount() {
+    fetch('https://jsonplaceholder.typicode.com/users')
+      .then((res) => res.json())
+      // .then((res) => console.log(res))
+      .then(res => this.setState({ monsters : res }))
+  }
   // SearchBox에 props로 넘겨줄 handleChange 메소드 정의
-
+  handleChange = (e) => {
+    this.setState({
+      userInput : e.target.value
+    })
+  }
   render() {
     // 필터링 로직
-
+    const filtered = this.state.monsters.filter(
+      (mon) => {
+       return mon.name.toLowerCase().indexOf(this.state.userInput.toLowerCase()) > -1;
+      }
+    );
     return (
       <div className="App">
         <h1>컴포넌트 재사용 연습!</h1>
-        {/* <SearchBox handleChange=정의한메소드 /> */}
-        {/* <CardList monsters=필터링 된 몬스터리스트 /> */}
+        <SearchBox handleChange={this.handleChange} />
+        <CardList monsters={filtered} />
       </div>
     );
   }
