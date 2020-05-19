@@ -42,6 +42,7 @@ class App extends Component {
       userInput : e.target.value
     })
   }
+  
   render() {
     // 필터링 로직
     const filtered = this.state.monsters.filter(
